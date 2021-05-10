@@ -7,11 +7,14 @@ import io.github.agentrkid.gamerdisguise.manager.DisguiseManager;
 import io.github.agentrkid.gamerdisguise.manager.skin.SkinData;
 import io.github.agentrkid.gamerdisguise.manager.skin.SkinStorage;
 import io.github.agentrkid.gamerdisguise.util.CC;
+import io.github.agentrkid.gamerdisguise.util.MojangUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class DisguiseCommand implements CommandExecutor {
     @Override
@@ -40,7 +43,14 @@ public class DisguiseCommand implements CommandExecutor {
                 }
 
                 Bukkit.getScheduler().runTaskAsynchronously(GamerDisguise.getInstance(), () -> {
-                    SkinData data = GamerDisguise.getInstance().getSkinStorage().getSkinData(player.getUniqueId());
+                    SkinData data;
+                    UUID disguiseSkinUuid = MojangUtil.getUuidFromName(output);
+
+                    if (disguiseSkinUuid != null) {
+                        data = GamerDisguise.getInstance().getSkinStorage().getSkinData(disguiseSkinUuid);
+                    } else {
+                        data = SkinStorage.DEFAULT_SKIN;
+                    }
 
                     boolean disguise = disguiseManager.disguise(player, output, data.getTextureValue(), data.getTextureSign());
 
@@ -54,7 +64,7 @@ public class DisguiseCommand implements CommandExecutor {
             } else {
                 player.sendMessage(CC.translate("&cCancelled disguising."));
             }
-        }).open(player, "Enter a disguise name");
+        }).open(player, "Enter a name");
         return true;
     }
 }

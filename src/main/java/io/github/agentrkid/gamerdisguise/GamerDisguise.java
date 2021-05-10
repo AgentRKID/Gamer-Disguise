@@ -34,6 +34,8 @@ public class GamerDisguise extends JavaPlugin {
 
         Configuration config = getConfig();
 
+        // TODO Move to storage allowing them todo session if they don't have redis.
+
         try {
             String password = config.getString("Redis.Pass");
             this.localJedisPool = new JedisPool(new JedisPoolConfig(), config.getString("Redis.Host"), config.getInt("Redis.Port"), 20000, password.isEmpty() ? null : password, config.getInt("Redis.DbId", 0));

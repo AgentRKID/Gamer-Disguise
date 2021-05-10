@@ -22,11 +22,11 @@ public class SkinStorage implements Listener {
     public static final String DEFAULT_SKIN_VALUE = "ewogICJ0aW1lc3RhbXAiIDogMTYyMDY4NTE0Mzc2MywKICAicHJvZmlsZUlkIiA6ICI2MGIyOTY5OWIzYWM0MjEzOGQxMDI1ZDM2Njk0ZDlhOCIsCiAgInByb2ZpbGVOYW1lIiA6ICJBZ2VudFJLSUQiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWE0YWY3MTg0NTVkNGFhYjUyOGU3YTYxZjg2ZmEyNWU2YTM2OWQxNzY4ZGNiMTNmN2RmMzE5YTcxM2ViODEwYiIKICAgIH0KICB9Cn0=";
     public static final String DEFAULT_SKIN_SIGN = "RtTDjx1RB8A6Mlh40p5CJcQwaltPmtykHqfiLjU8LrV/rTk/yt15UNrsrTm/snAAQNZqjnBGABv5Fov3GMlK49eAD3O0TYqidhRsTKtwRhZrsuQvMIMN57G4Zp8fQiH3kzszLtBgYy2qt3TzkXiXQhRS1ovJ5Ab12i1raSkEzNdu5pIgApeKAoJg3EPMrQjjIi59q0vxLseINmFQhqKBzp17YZJU8RZRTcECx/+lIK3U3a5ARxmRLveSa5gObEQ6v8VIRlv9jffk/BsqH8t024oymNYYNh1g+Q1jtQz0kRxIhFx5eBaR4xPkB1bxV2PpPG0J5UrT9tnV6fBwXzsEKfzBEswr6XMICW4B3PisRsrx1613/Aw3XSxivIGtVrOo0sDCe+iPpSQ6QwGp461drP281XnGsIKlU/1IdPmnkmFQQwClvFzy8k3IDZ0i47z0TigQyQ+rx9OApcJMZthP4wRBhGzDj7333SXQwToXYuavSzOzGeZsVr5S8iMXW1L7+LXPwNOmnBrEc5bXGM4qwiY7SGFqE9IpW4qQJIjriqHFtYjnC9XddaT234NKU5NwQkBjs5m6Hzlg5nKIzwxtJAHbc+lZkmRcUf1BpJf19hrMI0O0uOmemu8FWbpj4O6phAeuXJXcCCmRsFkHQ7p1GFjntwcol1NNHHXlzvjx3Ts=";
 
+    public final static SkinData DEFAULT_SKIN = new SkinData(DEFAULT_SKIN_VALUE, DEFAULT_SKIN_SIGN);
+
     @Getter private final StorageType storageType;
 
     private final Map<UUID, SkinData> skinDataMap = new HashMap<>();
-
-    private final SkinData defaultSkin = new SkinData(DEFAULT_SKIN_VALUE, DEFAULT_SKIN_SIGN);
 
     public SkinStorage() {
         storageType = StorageType.valueOf(GamerDisguise.getInstance().getConfig().getString("skin-cache-type").toUpperCase());
@@ -57,7 +57,7 @@ public class SkinStorage implements Listener {
             JsonObject object = GamerDisguise.JSON_PARSER.parse(reader).getAsJsonObject();
 
             if (object.has("error") || !object.isJsonObject()) {
-                return defaultSkin;
+                return DEFAULT_SKIN;
             }
 
             JsonObject properties = object.getAsJsonArray("properties").get(0).getAsJsonObject();
@@ -67,10 +67,12 @@ public class SkinStorage implements Listener {
             if (storageType == StorageType.REDIS) {
                 updateRedis(playerId, data);
             }
-            return skinDataMap.put(playerId, data);
+
+            skinDataMap.put(playerId, data);
+            return data;
         } catch (Exception ex) {
             ex.printStackTrace();
-            return defaultSkin;
+            return DEFAULT_SKIN;
         }
     }
 
@@ -81,12 +83,8 @@ public class SkinStorage implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        System.out.println("PLAYER JOINED.");
-
         Bukkit.getScheduler().runTaskLater(GamerDisguise.getInstance(), () -> {
-            System.out.println("BEFORE CAST");
             CraftPlayer player = (CraftPlayer) event.getPlayer();
-            System.out.println("AFTER CAST");
 
             List<Property> properties = new ArrayList<>(player.getProfile().getProperties().get("textures"));
 
@@ -97,7 +95,6 @@ public class SkinStorage implements Listener {
 
                 if (property != null && property.hasSignature()) {
                     SkinData data = skinDataMap.put(player.getUniqueId(), new SkinData(property.getValue(), property.getSignature()));
-                    System.out.println("Put data in map.");
 
                     if (storageType == StorageType.REDIS) {
                         Bukkit.getScheduler().runTaskAsynchronously(GamerDisguise.getInstance(), () -> updateRedis(player.getUniqueId(), data));
