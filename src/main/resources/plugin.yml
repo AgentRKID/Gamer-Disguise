@@ -1,0 +1,5 @@
+name: io.github.agentrkid.gamerdisguise.GamerDisguise
+version: ${git.commit.id.abbrev}
+author: AgentRKID
+main: io.github.agentrkid.gamerdisguise.GamerDisguise
+depend: [ProtocolLib]
