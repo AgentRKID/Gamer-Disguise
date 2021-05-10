@@ -1,6 +1,8 @@
 package io.github.agentrkid.gamerdisguise.manager;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import io.github.agentrkid.gamerdisguise.GamerDisguise;
 import io.github.agentrkid.gamerdisguise.event.PlayerDisguiseEvent;
 import io.github.agentrkid.gamerdisguise.event.PlayerUnDisguiseEvent;
 import io.github.agentrkid.gamerdisguise.util.ModifierUtil;
@@ -39,7 +41,7 @@ public class DisguiseManager {
         }
     }
 
-    public boolean disguise(Player player, String disguiseName) {
+    public boolean disguise(Player player, String disguiseName, String disguiseTextureValue, String disguiseTextureSign) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         EntityPlayer handle = craftPlayer.getHandle();
 
@@ -51,6 +53,13 @@ public class DisguiseManager {
         }
 
         GameProfile newGameProfile = new GameProfile(player.getUniqueId(), disguiseName);
+
+        if (disguiseTextureValue != null
+                && disguiseTextureSign != null) {
+            // For skins we need to add the
+            // texture property to the GameProfile
+            newGameProfile.getProperties().put("texture", new Property("textures", disguiseTextureValue, disguiseTextureSign));
+        }
 
         try {
             storedDisguiseData.put(craftPlayer.getUniqueId(), new DisguiseData(handle.getProfile(), player.getPlayerListName(), handle.displayName));
@@ -92,7 +101,10 @@ public class DisguiseManager {
             // Add them back to the map under the new name.
             playersByName.put(player.getName(), handle);
 
-            PlayerUtil.updatePlayer(craftPlayer);
+            // Just incase we update async
+            Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> {
+                PlayerUtil.updatePlayer(craftPlayer);
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -155,7 +167,10 @@ public class DisguiseManager {
             // Add them back to the map under their original name.
             playersByName.put(player.getName(), handle);
 
-            PlayerUtil.updatePlayer(craftPlayer);
+            // Just incase we update async
+            Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> {
+                PlayerUtil.updatePlayer(craftPlayer);
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

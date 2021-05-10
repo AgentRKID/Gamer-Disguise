@@ -4,6 +4,8 @@ import io.github.agentrkid.anvilmenuapi.menu.AnvilMenu;
 import io.github.agentrkid.anvilmenuapi.menu.CloseResult;
 import io.github.agentrkid.gamerdisguise.GamerDisguise;
 import io.github.agentrkid.gamerdisguise.manager.DisguiseManager;
+import io.github.agentrkid.gamerdisguise.manager.skin.SkinData;
+import io.github.agentrkid.gamerdisguise.manager.skin.SkinStorage;
 import io.github.agentrkid.gamerdisguise.util.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -37,8 +39,10 @@ public class DisguiseCommand implements CommandExecutor {
                     return;
                 }
 
-                Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> {
-                    boolean disguise = disguiseManager.disguise(player, output);
+                Bukkit.getScheduler().runTaskAsynchronously(GamerDisguise.getInstance(), () -> {
+                    SkinData data = GamerDisguise.getInstance().getSkinStorage().getSkinData(player.getUniqueId());
+
+                    boolean disguise = disguiseManager.disguise(player, output, data.getTextureValue(), data.getTextureSign());
 
                     if (disguise) {
                         player.sendMessage(CC.translate("&aYou have disguised as " + output + ".",

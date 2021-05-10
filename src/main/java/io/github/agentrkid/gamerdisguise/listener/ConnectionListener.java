@@ -19,7 +19,9 @@ public class ConnectionListener implements Listener {
             Player player = Bukkit.getPlayer(event.getName());
 
             if (player != null && player.isOnline()) {
-                player.kickPlayer(CC.translate("&cSomeone has logged in with the name " + player.getName() + "."));
+                // We can't kick async lol.
+                Bukkit.getScheduler().runTask(GamerDisguise.getInstance(),
+                        () -> player.kickPlayer(CC.translate("&cSomeone has logged in with the name " + player.getName() + ".")));
             } else {
                 // TODO: Make sure we can remove here?
                 disguiseManager.getPlayersByName().remove(event.getName());

@@ -1,0 +1,9 @@
+# REDIS/SESSION
+skin-cache-type: SESSION
+
+# Used for skin cache
+Redis:
+  Host: 'localhost'
+  Pass: ''
+  DbId: 0
+  Port: 6379
