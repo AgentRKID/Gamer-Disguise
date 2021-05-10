@@ -2,6 +2,7 @@ package io.github.agentrkid.gamerdisguise.manager;
 
 import com.mojang.authlib.GameProfile;
 import io.github.agentrkid.gamerdisguise.util.ModifierUtil;
+import io.github.agentrkid.gamerdisguise.util.PlayerUtil;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
@@ -80,32 +81,9 @@ public class DisguiseManager {
             // Add them back to the map under the new name.
             playersByName.put(player.getName(), handle);
 
-            updatePlayer(craftPlayer);
+            PlayerUtil.updatePlayer(craftPlayer);
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void updatePlayer(CraftPlayer update) {
-        update.getHandle().updateAbilities();
-        update.updateInventory();
-        update.setExp(update.getExp());
-        update.setLevel(update.getLevel());
-        update.setHealth(update.getHealth());
-        update.setFlying(update.isFlying());
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            boolean canSee = player.canSee(update);
-
-            if (!canSee) {
-                player.showPlayer(update);
-            }
-
-            player.hidePlayer(update);
-
-            if (canSee) {
-                player.showPlayer(update);
-            }
         }
     }
 
