@@ -14,6 +14,6 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        GamerDisguise.getInstance().getDisguiseManager().getStoredProfile().remove(event.getPlayer().getUniqueId());
+        GamerDisguise.getInstance().getDisguiseManager().getStoredDisguiseData().remove(event.getPlayer().getUniqueId());
     }
 }

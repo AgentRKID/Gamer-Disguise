@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class DisguiseManager {
     private Map<String, EntityPlayer> playersByName = new HashMap<>();
-    @Getter private final Map<UUID, GameProfile> storedProfile = new HashMap<>();
+    @Getter private final Map<UUID, DisguiseData> storedDisguiseData = new HashMap<>();
 
     private static Field GAME_PROFILE_FIELD;
 
@@ -43,7 +43,7 @@ public class DisguiseManager {
         GameProfile newGameProfile = new GameProfile(player.getUniqueId(), disguiseName);
 
         try {
-            storedProfile.put(craftPlayer.getUniqueId(), craftPlayer.getProfile());
+            storedDisguiseData.put(craftPlayer.getUniqueId(), new DisguiseData(handle.getProfile(), player.getPlayerListName(), handle.displayName));
 
             // Change the GameProfile in HumanEntity.
             GAME_PROFILE_FIELD.set(handle, newGameProfile);
