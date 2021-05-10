@@ -1,5 +1,6 @@
 package io.github.agentrkid.gamerdisguise;
 
+import io.github.agentrkid.gamerdisguise.command.DisguiseCommand;
 import io.github.agentrkid.gamerdisguise.listener.ConnectionListener;
 import io.github.agentrkid.gamerdisguise.manager.DisguiseManager;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class GamerDisguise extends JavaPlugin {
 
         disguiseManager = new DisguiseManager();
 
+        Bukkit.getPluginCommand("disguise").setExecutor(new DisguiseCommand());
         Bukkit.getPluginManager().registerEvents(new ConnectionListener(), this);
     }
 }
