@@ -1,6 +1,7 @@
 package io.github.agentrkid.gamerdisguise.listener;
 
 import io.github.agentrkid.gamerdisguise.GamerDisguise;
+import io.github.agentrkid.gamerdisguise.command.DisguiseCommand;
 import io.github.agentrkid.gamerdisguise.manager.DisguiseManager;
 import io.github.agentrkid.gamerdisguise.util.CC;
 import org.bukkit.Bukkit;
@@ -36,6 +37,7 @@ public class ConnectionListener implements Listener {
         if (disguiseManager.isDisguised(player)) {
             // They logged out lets just undisguise them because they're disguised.
             GamerDisguise.getInstance().getDisguiseManager().undisguise(player);
+            player.removeMetadata(GamerDisguise.METADATA, GamerDisguise.getInstance());
         }
     }
 }

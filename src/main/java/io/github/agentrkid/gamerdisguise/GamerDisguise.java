@@ -1,7 +1,5 @@
 package io.github.agentrkid.gamerdisguise;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import io.github.agentrkid.gamerdisguise.command.DisguiseCommand;
 import io.github.agentrkid.gamerdisguise.command.SkinCommand;
@@ -20,6 +18,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class GamerDisguise extends JavaPlugin {
+    public static String METADATA = "Disguised";
     public static JsonParser JSON_PARSER = new JsonParser();
 
     @Getter private static GamerDisguise instance;

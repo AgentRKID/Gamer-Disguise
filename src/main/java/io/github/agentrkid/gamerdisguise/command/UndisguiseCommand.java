@@ -28,6 +28,7 @@ public class UndisguiseCommand implements CommandExecutor {
 
         if (undisguise) {
             player.sendMessage(CC.translate("&aYou have undisguised."));
+            player.removeMetadata(GamerDisguise.METADATA, GamerDisguise.getInstance());
         } else {
             player.sendMessage(CC.translate("&cFailed to undisguise."));
         }

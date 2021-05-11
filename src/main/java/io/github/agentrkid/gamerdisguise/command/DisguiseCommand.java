@@ -13,10 +13,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.UUID;
 
 public class DisguiseCommand implements CommandExecutor {
+    public static FixedMetadataValue FIXED_METADATA = new FixedMetadataValue(GamerDisguise.getInstance(), "10010");
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("gamer.disguise.command")) {
@@ -70,12 +73,13 @@ public class DisguiseCommand implements CommandExecutor {
                         // We warn them that if a player with the name comes online they'll be kicked.
                         player.sendMessage(CC.translate("&aYou have disguised as " + output + ".",
                                 "&4&lWARNING&4: &cIf someone with the name \"" + output + "\" logs in, you will be kicked."));
+                        player.setMetadata(GamerDisguise.METADATA, FIXED_METADATA);
                     } else {
                         player.sendMessage(CC.translate("&cFailed to disguise."));
                     }
                 });
             } else {
-                player.sendMessage(CC.translate("&cCancelled disguising."));
+                player.sendMessage(CC.translate("&cCancelled disguising process."));
             }
         }).open(player, "Enter a name");
         return true;
