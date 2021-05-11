@@ -35,7 +35,7 @@ public class DisguiseCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (ProtocolLibrary.getProtocolManager().getProtocolVersion(player) > 47) {
+        if (ProtocolLibrary.getProtocolManager().getProtocolVersion(player) >= 47) {
             new AnvilMenu((result, output) -> {
                 if (result == CloseResult.FINISH) {
                     if (output.length() < 3) {
