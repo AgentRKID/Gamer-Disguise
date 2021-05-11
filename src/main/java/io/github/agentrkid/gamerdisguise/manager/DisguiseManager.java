@@ -53,6 +53,8 @@ public class DisguiseManager {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         EntityPlayer handle = craftPlayer.getHandle();
 
+        // Call event to allow hooked plugins to
+        // either cancel or do something within that plugin.
         PlayerDisguiseEvent event = new PlayerDisguiseEvent(player, disguiseName);
         Bukkit.getPluginManager().callEvent(event);
 
@@ -127,6 +129,8 @@ public class DisguiseManager {
             return false;
         }
 
+        // Call event to allow hooked plugins to
+        // either cancel or do something within that plugin.
         PlayerUnDisguiseEvent event = new PlayerUnDisguiseEvent(player);
         Bukkit.getPluginManager().callEvent(event);
 
@@ -164,11 +168,13 @@ public class DisguiseManager {
 
             PlayerConnection connection = handle.playerConnection;
 
-            connection.sendPacket(removeInfoPacket);
-            connection.sendPacket(addInfoPacket);
-            connection.sendPacket(respawnPacket);
-            connection.sendPacket(positionPacket);
-            connection.sendPacket(slotPacket);
+            if (connection != null) {
+                connection.sendPacket(removeInfoPacket);
+                connection.sendPacket(addInfoPacket);
+                connection.sendPacket(respawnPacket);
+                connection.sendPacket(positionPacket);
+                connection.sendPacket(slotPacket);
+            }
 
             // Add them back to the map under their original name.
             playersByName.put(player.getName(), handle);

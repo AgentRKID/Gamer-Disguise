@@ -57,6 +57,8 @@ public class SkinStorage implements Listener {
             JsonObject object = GamerDisguise.JSON_PARSER.parse(reader).getAsJsonObject();
 
             if (object.has("error") || !object.isJsonObject()) {
+                // Default to the default skin as the
+                // player that was searched doesn't exist.
                 return DEFAULT_SKIN;
             }
 
