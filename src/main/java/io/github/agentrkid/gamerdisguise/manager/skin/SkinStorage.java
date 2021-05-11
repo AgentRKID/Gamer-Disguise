@@ -88,8 +88,6 @@ public class SkinStorage implements Listener {
 
             List<Property> properties = new ArrayList<>(player.getProfile().getProperties().get("textures"));
 
-            System.out.println(properties);
-
             if (!properties.isEmpty()) {
                 Property property = properties.get(0);
 

@@ -19,6 +19,11 @@ import java.util.UUID;
 public class DisguiseCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("gamer.disguise.command")) {
+            sender.sendMessage(CC.translate("&cNo permission"));
+            return false;
+        }
+
         if (!(sender instanceof Player)) {
             sender.sendMessage(CC.translate("&cConsole can't disguise..."));
             return false;
@@ -39,6 +44,13 @@ public class DisguiseCommand implements CommandExecutor {
 
                 if (spaceSplit.length > 1) {
                     player.sendMessage(CC.translate("&cYou cannot have spaces in your name."));
+                    return;
+                }
+
+                Player checkPlayer = Bukkit.getPlayer(output);
+
+                if (checkPlayer != null) {
+                    player.sendMessage(CC.translate("&cThere is someone already online with the name " + output + "."));
                     return;
                 }
 
