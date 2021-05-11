@@ -41,7 +41,6 @@ public class DisguiseCommand implements CommandExecutor {
                 }
 
                 String[] spaceSplit = output.split(" ");
-
                 if (spaceSplit.length > 1) {
                     player.sendMessage(CC.translate("&cYou cannot have spaces in your name."));
                     return;

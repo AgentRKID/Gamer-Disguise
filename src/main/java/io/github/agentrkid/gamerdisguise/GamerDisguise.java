@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import io.github.agentrkid.gamerdisguise.command.DisguiseCommand;
+import io.github.agentrkid.gamerdisguise.command.SkinCommand;
 import io.github.agentrkid.gamerdisguise.command.UndisguiseCommand;
 import io.github.agentrkid.gamerdisguise.listener.ConnectionListener;
 import io.github.agentrkid.gamerdisguise.manager.DisguiseManager;
@@ -50,6 +51,8 @@ public class GamerDisguise extends JavaPlugin {
 
         Bukkit.getPluginCommand("disguise").setExecutor(new DisguiseCommand());
         Bukkit.getPluginCommand("undisguise").setExecutor(new UndisguiseCommand());
+        Bukkit.getPluginCommand("skin").setExecutor(new SkinCommand());
+
         Bukkit.getPluginManager().registerEvents(new ConnectionListener(), this);
     }
 

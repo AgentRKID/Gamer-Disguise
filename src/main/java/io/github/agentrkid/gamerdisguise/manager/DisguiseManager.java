@@ -110,9 +110,7 @@ public class DisguiseManager {
             playersByName.put(player.getName(), handle);
 
             // Just incase we update async
-            Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> {
-                PlayerUtil.updatePlayer(craftPlayer);
-            });
+            Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> PlayerUtil.updatePlayer(craftPlayer));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -176,13 +174,45 @@ public class DisguiseManager {
             playersByName.put(player.getName(), handle);
 
             // Just incase we update async
-            Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> {
-                PlayerUtil.updatePlayer(craftPlayer);
-            });
+            Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> PlayerUtil.updatePlayer(craftPlayer));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return true;
+    }
+
+    public void changeSkin(Player player, String textureValue, String textureSign) {
+        CraftPlayer craftPlayer = (CraftPlayer) player;
+        EntityPlayer handle = craftPlayer.getHandle();
+
+        GameProfile gameProfile = craftPlayer.getProfile();
+
+        gameProfile.getProperties().clear();
+        gameProfile.getProperties().put("texture", new Property("textures", textureValue, textureSign));
+
+        PacketPlayOutPlayerInfo removeInfoPacket = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, handle);
+        PacketPlayOutPlayerInfo addInfoPacket = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, handle);
+
+        WorldServer world = (WorldServer) handle.getWorld();
+        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(world.dimension, world.getDifficulty(),
+                world.worldData.getType(), handle.playerInteractManager.getGameMode());
+
+        Location location = player.getLocation();
+        PacketPlayOutPosition positionPacket = new PacketPlayOutPosition(location.getX(), location.getY(), location.getZ(),
+                location.getYaw(), location.getPitch(), Collections.emptySet());
+
+        PacketPlayOutHeldItemSlot slotPacket = new PacketPlayOutHeldItemSlot(player.getInventory().getHeldItemSlot());
+
+        PlayerConnection connection = handle.playerConnection;
+
+        connection.sendPacket(removeInfoPacket);
+        connection.sendPacket(addInfoPacket);
+        connection.sendPacket(respawnPacket);
+        connection.sendPacket(positionPacket);
+        connection.sendPacket(slotPacket);
+
+        // Just incase we update async
+        Bukkit.getScheduler().runTask(GamerDisguise.getInstance(), () -> PlayerUtil.updatePlayer(craftPlayer));
     }
 
     static {

@@ -6,3 +6,4 @@ depend: [ProtocolLib]
 commands:
   disguise: null
   undisguise: null
+  skin: null
