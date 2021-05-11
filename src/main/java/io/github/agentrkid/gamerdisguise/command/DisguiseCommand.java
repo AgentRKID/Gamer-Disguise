@@ -61,12 +61,14 @@ public class DisguiseCommand implements CommandExecutor {
                     if (disguiseSkinUuid != null) {
                         data = GamerDisguise.getInstance().getSkinStorage().getSkinData(disguiseSkinUuid);
                     } else {
+                        // Default to the normal skin if no player exists named from output
                         data = SkinStorage.DEFAULT_SKIN;
                     }
 
                     boolean disguise = disguiseManager.disguise(player, output, data.getTextureValue(), data.getTextureSign());
 
                     if (disguise) {
+                        // We warn them that if a player with the name comes online they'll be kicked.
                         player.sendMessage(CC.translate("&aYou have disguised as " + output + ".",
                                 "&4&lWARNING&4: &cIf someone with the name \"" + output + "\" logs in, you will be kicked."));
                     } else {

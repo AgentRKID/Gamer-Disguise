@@ -23,7 +23,6 @@ public class ConnectionListener implements Listener {
                 Bukkit.getScheduler().runTask(GamerDisguise.getInstance(),
                         () -> player.kickPlayer(CC.translate("&cSomeone has logged in with the name " + player.getName() + ".")));
             } else {
-                // TODO: Make sure we can remove here?
                 disguiseManager.getPlayersByName().remove(event.getName());
             }
         }
@@ -31,6 +30,12 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        GamerDisguise.getInstance().getDisguiseManager().undisguise(event.getPlayer());
+        Player player = event.getPlayer();
+        DisguiseManager disguiseManager = GamerDisguise.getInstance().getDisguiseManager();
+
+        if (disguiseManager.isDisguised(player)) {
+            // They logged out lets just undisguise them because they're disguised.
+            GamerDisguise.getInstance().getDisguiseManager().undisguise(player);
+        }
     }
 }

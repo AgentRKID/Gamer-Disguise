@@ -41,6 +41,14 @@ public class DisguiseManager {
         }
     }
 
+    public boolean isDisguised(Player player) {
+        return isDisguised(player.getUniqueId());
+    }
+
+    public boolean isDisguised(UUID playerId) {
+        return this.storedDisguiseData.containsKey(playerId);
+    }
+
     public boolean disguise(Player player, String disguiseName, String disguiseTextureValue, String disguiseTextureSign) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         EntityPlayer handle = craftPlayer.getHandle();
