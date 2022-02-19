@@ -1,7 +1,7 @@
 name: Gamer-Disguise
 version: ${git.commit.id.abbrev}
 author: AgentRKID
-main: io.github.agentrkid.gamerdisguise.GamerDisguise
+main: games.scorpio.disguise.GamerDisguise
 depend: [ProtocolLib]
 commands:
   disguise: null

@@ -96,7 +96,6 @@
             <groupId>io.github.agentrkid</groupId>
             <artifactId>AnvilMenuAPI</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- Other -->

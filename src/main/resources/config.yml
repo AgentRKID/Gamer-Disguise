@@ -1,9 +1,42 @@
-# REDIS/SESSION
-skin-cache-type: SESSION
+# Disguise Plugin Configuration, made by rkid#1802.
+# Note: Read the permissions column for a list of all permissions
 
-# Used for skin cache
-Redis:
-  Host: 'localhost'
-  Pass: ''
-  DbId: 0
-  Port: 6379
+# Join the discord at https://discord.gg/pz3ezHE6 for support or if you need to claim your license key.
+License:
+  key: ""
+
+Settings:
+  blocked-names: [] # Names that won't be allowed
+  random-nickname: false # Will it pick a random nick
+  #random-nicknames: ["AgentRKID", "speedboost57", "Marcel", "Spyno", "Jordan", "lolitsalex"]
+  skin-change-require-disguise: true # When attempting to change your skin does it require you to be disguised?
+  skin-cache-type: SESSION # Redis/Json/Session (Session will reset whenever server has stopped)
+  # redis-uri: "" # Only if Redis is enabled remove the "#" in front of redis-uri:
+
+Permissions:
+  disguise: "disguise.command" # Disguise command will automatically apply the skin or a default skin if an account under the inputed name doesn't exist
+  skin: "skin.command" # Skin Command allows players to change their skin of the current disguise or normal player
+  bypass-random-nickname: "disguise.name.random.bypass" # Bypass random name check
+
+Messages:
+  not-disguised: "&cYou're currently not disguised."
+  already-disguised: "&cYou're already disguised."
+  spaces-not-allowed: "&cYou cannot have spaces in your name."
+  disguise-online: "&cThere is someone already online with the name %Name%"
+  disguised: ["&aYou have disguised as %Name%","&4&lWARNING&c: If someone with the name \"%Name%\" logs in, you'll be kicked."]
+  undisguised: "&aYou have undisguised."
+  changed-skins: "&aYou've changed skins."
+  change-skins-disguise: "&cYou must be disguised to change skins."
+
+# Ranks are sorted by weight, %player% to display the player's name.
+Ranks:
+  Owner:
+    color: '&4'
+    weight: 1
+    permission: "disguise.as.owner"
+    chat-format: "&7[&4Owner&7] &4%player%&7: "
+  Famous:
+    color: '&6'
+    weight: 10
+    permission: "disguise.as.famous"
+    chat-format: "&7[&6Famous&7] &6%player%&7: "
